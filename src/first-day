@@ -30,3 +30,24 @@
       MESI协议：middle
       JMM：middle
 
+*多线程的发展历史
+    批处理->进程:资源分配的最小单元
+    ->线程：程序执行的最小单元
+*线程的应用
+    通过并行计算提高程序性能
+    等待网络、IO响应导致的耗时问题
+*并发编程的基础
+    Thread
+    Runnable
+    *Callable/future
+    责任链例子
+    线程状态：6种
+    new 没有调用start方法
+    runnable 运行状态
+    blocked 阻塞状态
+    waiting 等待状态
+    timed_waiting 超时等待
+    terminated 终止状态
+
+--线程安全问题
+
