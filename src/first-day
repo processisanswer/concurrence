@@ -1,0 +1,32 @@
+*线程6种状态
+    new
+    runnable
+    timed_waiting
+        #带时间的
+        sleep(long)
+        wait(long)
+        join()
+        lockSupport.park()
+    waiting
+        #不带时间的
+        wait
+        join
+        park
+    blocked
+        synchronized
+        分3类
+        等待阻塞 wait
+        同步阻塞 synchronized
+        其他阻塞 sleep，join等
+    terminated
+*线程的启动和终止
+    interrupt  优雅中断的方式
+    通过指令的方式
+    volatile boolean isStop=false
+    Thread.interrupt() 线程复位
+
+问题：线程终止：deep
+      atomic 可见性问题
+      MESI协议：middle
+      JMM：middle
+
