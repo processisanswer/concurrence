@@ -38,7 +38,7 @@ Monitor
     通过对象内的监视器monitor实现
 ----
 wait和notify
-是用来让线程进入等待状态以及使得线程唤醒的两个操作
+是用来让线程进入等待状态以及使得线程唤醒的两个操作，作用在synchronized范围内
 原理：
     调用wait方法，首先会获取监视器锁，获得成功以后，
     会让当前线程进入等待状态进入等待队列并释放锁；
@@ -56,4 +56,38 @@ wait和notify为什么需要在synchronized里边
     得知道它在哪里？所以就必须要找到这个对象获取
     到这个对象的锁，然后到这个对象的等待队列中去唤醒一个线程。
 
+*synchronized的范围
+------
+锁的获取过程
+自旋锁 for(::){
+    获取锁
+}
+偏向锁 场景：锁不仅不存在竞争，并且都是由同一个线程获得
 
+轻量级锁 场景：没有多线程竞争的情况下，使用轻量级锁
+重量级锁：
+    monitorenter--Monitor-->monitor enter成功--object-->monitorexit
+    获取锁失败的进入队列CXQ/EntryList等待里
+
+    CXQ队列 LIFO 后进先出 CAS操作
+    ->进入后，自旋->获取失败，park，获取成功，出队列进入EntryList，更新队列指针
+    EntryList 2Q算法，降低争夺频率
+
+    owner Thread ，释放锁时，通知EntryList，得出一个获胜线程
+----
+wait和notify为什么要先获取锁?
+持有锁的线程 wait时，调用lock.wait()方法，进入WaitSet等待队列，调用park方法，并释放锁。
+notify方法执行时，获取锁的线程调用lock.notify()方法，monitorexit 释放锁后，从
+WaitSet队列中，抓走一个线程进入就绪队列。
+
+wait 释放当前的对象锁，使得当前进程进入阻塞
+notify 首先确定唤醒哪个线程，这个线程位置何在
+
+wait和sleep有何区别?
+
+----预习
+AQS Unsafe CAS LockSupport
+AtomicInteger
+ReentantLock
+CountDownLatch
+线程池

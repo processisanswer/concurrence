@@ -1,0 +1,40 @@
+Lock的使用
+AQS原理分析
+Condition
+CountDownLatch、Semaphore
+线程池原理分析
+-----
+Lock接口
+*synchronize与Lock有何区别
+
+ReentrantLock 重入锁
+基于ASQ实现
+有两种：公平重入锁和非公平重入锁
+ReentrantReadWriteLock 重入读写锁--共享锁，同一时刻可以有多个线程获得锁
+         --读锁  写锁，很多场景下读多写少，性能优
+         提高读操作的性能
+AQS--AbstractQueueSynchronizer FIFO队列
+提供了两种功能：
+    独占锁、共享锁（仅读与读是共享的）
+静态内部类 Node 双向链表的结构
+将未获得锁的线程对象封装成Node对象加入到这个双向链表，同步队列
+加入时，为了确保线程安全，使用CAS
+有两个算法
+compareAndSetTail-->链表
+compareAndSetHead-->链表
+首节点视为获取了锁的线程对象
+-----------
+CAS compareAndSwap 乐观锁的实现
+保证线程安全的情况下，把线程加入链表中
+
+
+
+
+
+
+
+
+
+
+
+
