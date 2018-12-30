@@ -27,7 +27,24 @@ JDK为我们内置了机种常见线程池的实现，均可使用
 Executors工厂类创建
 Executors.newFixedThreadPool()
 #返回一个固定数量的线程池，线程数不变，当有一个任务
-提交时，
+提交时，若线程池中空闲，则立即执行，若没有，则会被
+暂缓在一个任务队列中，等待有空闲的线程去执行。
+Executors.newSingleThreadExecutor();
+Executors.newCashedTreadPool();
+#返回一个可根据实际情况调整线程个数的线程池，不限制
+最大线程数量，若用空闲的线程则执行任务，若无任务则不
+创建线程，并且每一个空闲线程会在60秒后自动回收。
+newScheduledThreadPool()创建一个可以指定线程的数量的
+线程池，但是这个线程池还带有延迟和周期性执行任务的功能，
+类似定时器。
+------
+submit和execute的区别
+执行一个任务，可以使用submit和execute,两者区别
+1.execute只能接受Runnable类型的任务
+2.submit不管是Runnable还是Callable类型的任务都可以接受，但是
+Runnable返回值均为void，所以使用Future的get()获得的还是null
+
+
 
 
 
