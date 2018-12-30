@@ -12,14 +12,16 @@ public class ReentrantLockDemo {
     static Lock lock=new ReentrantLock();
     private static int i=0;
     public static void incr(){
+
+        lock.lock();
         try {
+            System.out.println("当前线程："+Thread.currentThread().getName()+"获取锁成功，但是得休息1毫秒...");
             Thread.sleep(1);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        lock.lock();
         i++;
-        System.out.println("当前线程名称："+Thread.currentThread().getName()+" i->"+i);
+        System.out.println("当前线程名称："+Thread.currentThread().getName()+" 执行后i->"+i);
         lock.unlock();
     }
 
