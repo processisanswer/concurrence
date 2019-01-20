@@ -1,0 +1,93 @@
+synchronized的使用
+synchronized的三种应用方式
+*修饰实例方法
+*静态方法
+*修饰代码块
+synchronized锁定的对象必须是同一个，如果是
+不同对象，意味着是不同的房间钥匙，对于访问者
+来说是没有任何影响的。
+----
+javap -v //查看对应代码的字节码指令
+同步代码块实现使用了monitorenter 和monitorexit指令
+隐式的执行了Lock和UnLock操作，用于提供原子性保证
+本质上都是对一个对象的监视器monitor进行获取，这个
+过程是排他的，也就是说同一时刻只能有一个线程获取到
+由synchronized所保护对象的监视器
+----
+synchronized的锁的原理
+jdk1.6以后对synchronized锁进行了优化，包含偏向锁、轻量级锁
+、重量级锁。
+两个重要概念
+java对象头
+    Hotspot虚拟机中，对象在内存中的布局分为三块
+    区域：对象头、实例数据和对齐填充
+    java对象头是实现synchronized的锁对象的基础，
+    一般，synchronized使用的锁对象是存储在java
+    对象头里。
+Monitor
+    可理解为一个同步工具，也可描述为一种同步机制。
+    所有的Java对象是天生的Monitor。
+自旋锁(CAS)
+    让不满足条件的线程等待一段时间，而不是立即挂起。
+    看持有锁的线程是否能够很快释放锁。其实就是一段
+    没有任何意义的循环。
+    自旋等待的时间或者次数有一个限度，超限即挂起。
+偏向锁
+轻量级锁
+重量级锁
+    通过对象内的监视器monitor实现
+----
+wait和notify
+是用来让线程进入等待状态以及使得线程唤醒的两个操作，作用在synchronized范围内
+原理：
+    调用wait方法，首先会获取监视器锁，获得成功以后，
+    会让当前线程进入等待状态进入等待队列并释放锁；
+    然后当其他线程调用notify或者notifyAll以后，会
+    从等待队列中唤醒任意一个线程，而执行完notify方法以后
+    ，并不会立马唤醒线程，原因是当前的线程仍然持有这把锁，
+    处于等待状态的线程无法获得锁。必须要等到当前的线程执行
+    完monitorexit指令以后，也就是锁被释放以后，处于
+    等待队列中的线程就可以开始竞争锁了。
+wait和notify为什么需要在synchronized里边
+    wait方法的语义有两个，一个是释放当前的对象锁、另一个是
+    使得当前线程进入阻塞队列，而这些操作都和监视器是相关的，所以
+    wait必须要获得一个监视器锁
+    而对notify来说也是一样，它是唤醒一个线程，既然要去唤醒，首先
+    得知道它在哪里？所以就必须要找到这个对象获取
+    到这个对象的锁，然后到这个对象的等待队列中去唤醒一个线程。
+
+*synchronized的范围
+------
+锁的获取过程
+自旋锁 for(::){
+    获取锁
+}
+偏向锁 场景：锁不仅不存在竞争，并且都是由同一个线程获得
+
+轻量级锁 场景：没有多线程竞争的情况下，使用轻量级锁
+重量级锁：
+    monitorenter--Monitor-->monitor enter成功--object-->monitorexit
+    获取锁失败的进入队列CXQ/EntryList等待里
+
+    CXQ队列 LIFO 后进先出 CAS操作
+    ->进入后，自旋->获取失败，park，获取成功，出队列进入EntryList，更新队列指针
+    EntryList 2Q算法，降低争夺频率
+
+    owner Thread ，释放锁时，通知EntryList，得出一个获胜线程
+----
+wait和notify为什么要先获取锁?
+持有锁的线程 wait时，调用lock.wait()方法，进入WaitSet等待队列，调用park方法，并释放锁。
+notify方法执行时，获取锁的线程调用lock.notify()方法，monitorexit 释放锁后，从
+WaitSet队列中，抓走一个线程进入就绪队列。
+
+wait 释放当前的对象锁，使得当前进程进入阻塞
+notify 首先确定唤醒哪个线程，这个线程位置何在
+
+wait和sleep有何区别?
+
+----预习
+AQS Unsafe CAS LockSupport
+AtomicInteger
+ReentantLock
+CountDownLatch
+线程池

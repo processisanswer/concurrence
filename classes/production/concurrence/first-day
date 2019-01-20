@@ -1,0 +1,53 @@
+*线程6种状态
+    new
+    runnable
+    timed_waiting
+        #带时间的
+        sleep(long)
+        wait(long)
+        join()
+        lockSupport.park()
+    waiting
+        #不带时间的
+        wait
+        join
+        park
+    blocked
+        synchronized
+        分3类
+        等待阻塞 wait
+        同步阻塞 synchronized
+        其他阻塞 sleep，join等
+    terminated
+*线程的启动和终止
+    interrupt  优雅中断的方式
+    通过指令的方式
+    volatile boolean isStop=false
+    Thread.interrupt() 线程复位
+
+问题：线程终止：deep
+      atomic 可见性问题
+      MESI协议：middle
+      JMM：middle
+
+*多线程的发展历史
+    批处理->进程:资源分配的最小单元
+    ->线程：程序执行的最小单元
+*线程的应用
+    通过并行计算提高程序性能
+    等待网络、IO响应导致的耗时问题
+*并发编程的基础
+    Thread
+    Runnable
+    *Callable/future
+    责任链例子
+    线程状态：6种
+    new 没有调用start方法
+    runnable 运行状态
+    blocked 阻塞状态
+    waiting 等待状态
+    timed_waiting 超时等待
+    terminated 终止状态
+
+--线程安全问题
+

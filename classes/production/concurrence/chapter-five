@@ -1,0 +1,60 @@
+CountDownLatch
+        CountDownLatch是一个同步工具类，允许一个或多个线程或
+    多个线程一致等待，直到其他线程的操作执行完毕再执行。
+        CountDownLatch提供了2个方法，一个是countDown,一个是
+    await。countDownLatch初始化的时候需要传入一个整数，
+    在这个整数倒数到0之前，调用了await方法的程序都必须要等待，
+    然后通过countDown来倒数。
+使用场景：实现最大的并行请求，让N个线程同时执行
+源码分析：存在一个内部类Sync，CountDownLatch实际上是使得线程阻塞了，
+既然线程阻塞了一定涉及到AQS队列。
+await函数会使当前线程在countdownlatch倒计时到0之前
+一直等待，除非线程终端。
+--------
+Semaphore
+    Semaphore就是我们常说的信号灯，Semaphore可以控制
+    同时访问的线程个数，通过acquire获取一个许可，如果没有
+    就等待，通过release释放一个许可。类似限流的作用。
+使用场景
+可以实现对某些接口访问的限流
+---------
+原子操作
+java5以后，提供了原子操作类
+这些原子操作类提供了一种简单、高效以及线程安全的更新操作。
+-------
+线程池的使用
+JDK为我们内置了机种常见线程池的实现，均可使用
+Executors工厂类创建
+Executors.newFixedThreadPool()
+#返回一个固定数量的线程池，线程数不变，当有一个任务
+提交时，若线程池中空闲，则立即执行，若没有，则会被
+暂缓在一个任务队列中，等待有空闲的线程去执行。
+Executors.newSingleThreadExecutor();
+Executors.newCashedTreadPool();
+#返回一个可根据实际情况调整线程个数的线程池，不限制
+最大线程数量，若用空闲的线程则执行任务，若无任务则不
+创建线程，并且每一个空闲线程会在60秒后自动回收。
+newScheduledThreadPool()创建一个可以指定线程的数量的
+线程池，但是这个线程池还带有延迟和周期性执行任务的功能，
+类似定时器。
+------
+submit和execute的区别
+执行一个任务，可以使用submit和execute,两者区别
+1.execute只能接受Runnable类型的任务
+2.submit不管是Runnable还是Callable类型的任务都可以接受，但是
+Runnable返回值均为void，所以使用Future的get()获得的还是null
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

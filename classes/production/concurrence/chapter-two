@@ -1,0 +1,48 @@
+#JMM内存模型
+#JMM如何解决原子性、可见性、有序性的问题
+#volatile和synchronized
+
+----
+多线程间通信方式
+    共享主内存变量
+    消息传递 wait/notify
+volatile/synchronized/final/j.u.c
+原子性-synchronized(monitorenter/monitorexit)
+可见性-voliatile、synchronized、final
+有序性-volatile、synchronized
+----
+volatile
+轻量级的锁，解决可见性(lock指令)、防止指令重排
+*join()--保证某个线程执行完毕
+
+内存屏障
+优化屏障
+从CPU层面来了解什么是内存屏障
+复合操作的原子性，volatile 没法保证
+javap -c VolatileDemo  //查看字节码 i++ 三个操作
+----
+synchronized
+AtomicInteger(CAS)、Lock(CAS/LockSupport/AQS/unsafe)
+是干嘛的？
+可以保证可见性，防止内存重排序
+#lock->缓存锁MESI
+#内存屏障
+
+使用场景：线程的关闭
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
