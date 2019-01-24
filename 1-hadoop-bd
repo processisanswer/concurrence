@@ -63,9 +63,10 @@
 		节点的数据越多，整体的计算时间越短，JobTracker管理执行任务
 		的TaskTracker
 		
-		NameNode和DataNode负责完成数据存储
-		JobTracker和TaskTracker负责完成数据计算
-			
+		HDFS：NameNode和DataNode负责完成数据存储
+		MapReduce:JobTracker和TaskTracker负责完成数据计算
+		
+		NameNode和JobTracker不一定非要在同一台机器上，在生产中，通常是分开的，因为用户的请求，NameNode也接收		
 			
 			
 			
