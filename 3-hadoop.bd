@@ -1,0 +1,53 @@
+--HDFS--体系结构
+	分布式文件系统：数据存储在多台服务器上，但是对用户透明
+	HDFS特点
+	(1)中间有一层结构，把外部客户端看到的文件系统逻辑结构与真正数据存储的物理结构
+	解耦了。数据存储在多个节点上，环境不稳定，通过备份实现故障恢复和管理工作。
+	(2)分布式文件系统不限于HDFS一种，HDFS是hadoop领域的，适用于一次写入多次查询，
+	不支持修改，如果上传数据错误，再次上传一次即可。
+	(3)不支持并发写情况，小文件不适合
+--HDFS 三部分--
+	(1)NameNode
+		只占一台机器，整个文件系统的管理节点，维护者整个文件系统的文件目录树、
+		文件/目录的元信息和文件对应的数据块列表，接收用户的情况
+		针对文件夹的操作mkdir/rmr/ls/lsr，只需要跟NamNode通信即可
+		针对文件上传操作，先通过NameNode存储目录结构，客户端在把数据直接上传至DataNode
+		针对大数据，NameNode会把数据分散成小块进行存储，好处是：
+			空间利用率高、传输容错性高、易于管理、维护和使用
+		用户向DataNode上面进行读和写的时候是一个block、一个block进行读和写的，读写的时候
+		要先和NameNode通信，后和DataNode通信。
+		核心数据有：
+			fsimage：FileSystem元数据的镜像，保存目录数据，备份冗余，为了安全
+					 hdfs-default.xml中将dfs.name.dir的之存储改为使用","分割的多个目录列表
+			edits:保存操作日志
+			fstime：保存最近一次checkpoint的时间
+			fsimage/edits/fstime 存放在linux本地磁盘的位置：hadoop/tmp/dfs/name/current
+			
+	(2)DataNode
+		-1-提供真实文件数据的存储服务
+			文件块 block 是HDFS数据存储的最基本的单位，默认大小64MB，方便二进制数据管理
+						 conf/hdfs-site.xml文件中添加dfs.block.size设置覆盖
+						 block块位置：hadoop/tmp/dfs/data下的current文件夹
+		-2-Replication(备份数量)
+			多副本，默认是3份，可在conf/hdfs-site.xml文件中添加dfs.replication的值覆盖
+			hdfs-default.xml中的dfs.replication
+			备份是为了数据安全性，网络故障时，依旧可用
+	(3)SecondaryNameNode
+			hadoop不支持热备，配置即可，只做一件事，就是从NameNode上下载元数据信息(fsimage/
+			edits),在SecondaryNameNode中合并，合并完成之后，生成一个新的fsimage,然后上传
+			到NameNode中，同时重置NameNode中的Edits。
+			什么情况下SecondaryNameNode会进行合并？
+				触发合并edits分为时间触发和大小触发，在hdfs-default.xml中查看fs.checkpoint.perid
+				和fs.checkpoint.size中的值，触发时机中大小是优先的。
+				SecondaryNameNode一旦开始合并，就不能往edits中写数据，转为edits.new中写数据。
+			NameNode单点问题，解决方案：
+				使用dfs.name.dir的多目录保存数据(最经济、简单、方便)
+				使用SecondaryNameNode，不能保证数据完全准确性
+				使用avatarnode，第三方存储
+			--执行HDFS的格式化时发生了什么事情--
+				NameNode创建自己的目录结构和DataNode无关，因为没有实际数据
+				NameNode所在节点和SecondaryNameNode所在节点上的VERSION的namespaceID必须保证一致
+				
+				因为多次格式化导致的问题，可以尝试把namespaceID改成完全一致就可以了。
+				
+			

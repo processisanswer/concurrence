@@ -1,0 +1,28 @@
+HDFS的shell操作
+	bin/hadoop
+	namenode -format 格式化文件系统
+	hadoop fs  运行一个文件系统的用户客户端
+	hadoop fs -ls /
+	#文件夹相关
+	hadoop fs -mkdir hdfs://centos01:9000/dir1
+	#创建文件
+	hadoop fs -touchz hdfs://centos01:9000/file1
+	文件是有副本数据的，大小是0，副本数是3
+	在htfs中不能无中生有的创建一个有内容的文件，只能通过外部的客户端把有内容的给上传上去。
+	touchz创建的文件是没有内容的。
+
+	#上传文件
+	hadoop fs -put 源目录 hdfs目录
+	#查看文件内容
+	hadoop fs -text hdfs路径
+	
+	hadoop fs -text hdfs路径 | grep 或者 hadoop fs -text hdfs路径 | more
+	加管道过滤、一页页显示
+	#下载文件
+	hadoop fs -get hdfs路径 本地路径
+	#递归删除
+	hadoop fs -rmr hdfs路径  
+	#查看命令用法
+	hadoop fs -help 具体命令 
+	#显示路径中所有文件的大小
+	hadoop fs -du hdfs路径

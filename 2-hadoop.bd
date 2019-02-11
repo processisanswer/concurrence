@@ -1,0 +1,47 @@
+--hadoop是什么
+	HDFS：NameNode、DataNode
+	MapReduce:JobTracker、TaskTracker
+		NameNode和JobTracker不一定非要在同一台机器上，在生产中，通常是分开的，因为用户的请求，
+	NameNode接收，JobTracker也接收，为了防止NameNode操作慢，所以NameNode最好是一台机器，充分
+	利用CPU和内存，JobTracker也是一台机器，都是独立的。
+		DataNode和TaskTracker通常是同一台机器，因为TaskTracker运行时，处理本地数据更快，没有
+	网络延时和风险，DataNode只管理本地，不管理远程。
+		用户存储数据时首先通过NameNode获取读写数据的位置，之后的数据直接同DataNode交互。NameNode
+	只是负责管理用户申请Block块和BlockId。
+		这样的架构设计在于使得数据不经过NameNode,所以架构没有瓶颈
+	
+--hadoop的特点
+	扩容能力scalable，可靠性reliably的存储和处理PB级别的数据
+	成本低economical，可通过普通机器组成的服务器集群实现
+	高效率efficient，通过分发数据，在所有数据节点上并行parallel处理数据
+	可靠性reliable,自动维护数据多份备份，任务失败后自动重新部署redeploy计算任务
+				    JobTracker可监控TaskTracker运行情况，一旦某个TaskTracker异常，可在其他节点上再启
+					一个任务，保证任务执行。
+--hadoop集群的物理分布
+	BigData-->switch-1000Mbit->switch -100M->JobTracker
+									  -100M->NameNode
+									  -100M->TaskTracker/DataNode
+									  -100M->TaskTracker/DataNode
+									  ...这一组总共10个
+		   -->switch-1000Mbit->switch -100M->TaskTracker/DataNode
+									  -100M->TaskTracker/DataNode
+									  ...这一组也有10个
+	主节点只有一个，从节点有很多个，并且TaskTracker和DataNode都在一起，实际部署时，JobTracker和
+	NameNode各有一台机器，集群需要扩展时，只需要增加从节点。机器之间通信通过网络进行传输，用户
+	通过一个外部网络连接到这个局域网中。
+--单个节点物理结构
+	Master node：首先是一台服务器Server
+				  Server中安装Linux系统
+				  安装JVM 
+				  之后是hadoop的java程序
+				  Hadoop utility 基础设施组件
+				  NameNode 命令节点
+				  JobTracker 任务分配节点
+				  Browser 浏览器
+				  Secondary NameNode 备用命令节点
+	Slave node： 一台服务器Server
+				 安装Linux
+				 安装JVM
+				 hadoop的java程序——
+				 DataNode 和 TaskTracker
+
