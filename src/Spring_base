@@ -1,0 +1,98 @@
+Spring生态，Java Web开发事实上的标准
+
+1 高效看源码的方法
+    猜想+验证  70%+30%
+    ----
+    拿到需求就开干，干完之后就返工。
+    先思考，想清楚再干。
+    思考的时间，是自己留出来的
+    ----
+2 Spring代码优雅之道
+    只需要300行代码
+    提炼精华
+
+3 过程
+    1 加载配置文件；
+    doLoadConfig();
+    2 解析并扫描相关的类；
+    doScanner();
+    3 反射实例化相关的类（标有指定注解的），加入IoC容器中；
+    doInstance();
+    4 依赖注入
+    doAutowired();
+    5 初始化HandlerMapping
+    initHandlerMapping();
+
+    System.out.println("spring framework init successs");
+    编码规范：减少代码嵌套。
+
+
+private Map<String,Method> handlerMapping
+    =new HashMap<>();
+private Map<String,Object> ioc;
+
+
+访问的时候，调用doDispatcher();
+    解决方法调用时，实例找不着的问题，
+    参数类型转化的问题
+
+    private List<Handler> handlerMapping =new ArrayList<>();
+    //内部类
+    Handler{
+        Object controller;
+        Method method;
+        Pattern pattern; //uri  是一个正则
+        Map<String,String[]> params;//相残列表
+    }
+
+Spring 怎么控制bean不被回收的？
+    单例：Spring的运行周期，都不被回收
+    得益于IOC，因为采用注册式的单例，
+    始终在Map中保存的实例的引用地址。
+    GC 只要当IOC容器不被销毁，IOC中的
+    单例Bean就永远存在。
+    容器是static的，所以启动，就会初始化。
+
+知其一却不知其二，知识就是碎片化的一种积累，
+容易忘，学习方法最重要。
+只有系统化学习，才能融会贯通。
+
+Spring中的Bean是不是线程安全的？
+    是和不是，都不对，以为这是一个坑。
+       来源：Bean是通过扫描->反射->new出来的
+        做了一个动作，然后将它保管起来了。
+    这个Bean是不是线程安全的，跟Spring没有关系。
+    安全不安全，跟Bean本身有关。
+
+一个实例中，只有包含存在堆中、方法区中的变量，才会涉及线程安全问题。
+
+    不要用身体上勤奋，
+    来掩盖思维上懒惰
+    从来都是获取，没有消化。
+
+    Spring ，今晚过后，不再慌！
+------------------------------------------
+Bean的生命周期
+
+Spring 怎么控制bean不被回收的？
+
+Spring中的Bean是不是线程安全的？
+
+如果自己做一个aop，该注意到哪方面ne ?
+
+Spring用了哪些设计模式？
+
+自是实现一个ioc aop 系统
+
+Spring 怎么进行事务处理
+
+BeanFactory和FactoryBean的区别
+
+
+
+
+
+
+
+
+
