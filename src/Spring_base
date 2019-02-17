@@ -73,7 +73,19 @@ Spring中的Bean是不是线程安全的？
     Spring ，今晚过后，不再慌！
 ------------------------------------------
 Bean的生命周期
-
+    1--实例化、Bean的建立
+    2--设置属性值，属性注入
+    3--Bean的Id，如果实现了BeanNameAware接口，工厂调用Bean的setBeanName()方法，传入Bean的ID
+    4--容器本身，如果实现了BeanFactoryAware接口，工厂调用Bean的setBeanFactory()方法，传入工厂自身
+    5--BeanPostProcessor的预初始化方法，如果BeanPostProcessors和Bean有关联，则Bean的postProcessBeforeInitialization()方法将被调用
+    6--属性值设置完成后的方法，如果Bean类实现了InitializingBean接口，则执行它的afterPropertiesSet()方法
+    7--定制的初始化方法，如果Bean定义文件中，自定义了init-method属性，则执行属性指定的方法
+    8--BeanPostProcessor的后初始化方法，如果有有任何的BeanPostProcessors实例与Bean实例关联，则执行BeanPostProcessors实例的ProcessAfterInitializtion()方法
+    9--Bean就可以用了
+    ---销毁---
+    1--容器关闭
+    2--调用DisposableBean的destroy()方法
+    3--调用定制的destroy-method属性配置的销毁方法
 Spring 怎么控制bean不被回收的？
 
 Spring中的Bean是不是线程安全的？
