@@ -144,6 +144,47 @@ Spring 怎么进行事务处理
 
 
 BeanFactory和FactoryBean的区别
+    BeanFactory是个Factory，也就是IOC容器或对象工厂，
+    FactoryBean是个Bean，在Spring中，所有的Bean
+    都是由BeanFactory(也就是IOC容器)来进行管理的。
+    但对FactoryBean而言，这个Bean不是简单的Bean，
+    而是一个能生产或者修饰对象生成的工厂Bean，它
+    的实现与设计模式中的工厂模式和修饰器模式类似。
+    1--BeanFactory  是对象工厂，IOC容器的顶层接口设计
+        BeanFactory定义了IOC容器的最基本形式，并提供了
+        IOC容器应遵守的最基本的接口，也就是Spring IOC
+        所遵循的最底层和最基本的编程规范。
+        在Spring代码中，BeanFactory只是个接口，并不是
+        IOC容器的具体实现，但是Spring容器给出了很多种
+        实现，如
+        DefaultListableBeanFactory、
+        XmlBeanFactory、
+        ApplicationContext等，都是附加了某种功能的实现。
+    2--FactoryBean  是一个Bean接口，为了灵活、方便实例化复杂的Bean。
+        一般情况下，Spring通过反射机制利用<bean>的
+        class属性指定实现类实例化Bean，在某些情况下，
+        实例化Bean过程比较复杂，如果按照传统方式，则需要
+        在<bean>中提供大量的配置信息。配置方式的灵活性是
+        受限的，这是采用编码的方式可能会得到一个简单的方案。
+        Spring为此提供了一个FactoryBean工厂类接口，用户
+        可通过实现这个接口定制实例化Bean的逻辑。
+        这隐藏了实例化一些复杂Bean的细节，给上层应用带来了
+        便利。从Spring3.0开始支持泛型。
+
+        当配置文件中<bean>的class属性配置的实现类是
+        FactoryBean时，通过getBean()方法返回的不是
+        FactoryBean本身，而是FactoryBean的getObject()
+        方法所返回的对象，相当于FactoryBean getObject()
+        代理了getBean()方法。
+
+
+
+
+
+
+
+
+
 
 
 
