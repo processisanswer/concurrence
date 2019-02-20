@@ -1,0 +1,143 @@
+JVM JRE JDK 三者关系
+
+
+1.为什么可用Object类？
+
+
+2 Java启动类是哪个？
+
+
+3 双亲委派与沙箱安全机制？验证
+
+
+4 native->thread->start->start0->
+
+
+JVM入门与实战？
+    1 JVM体系结构概述
+        JVM位置
+            Java Virtual Machine
+
+            操作系统 如Windows Linux等
+            硬件体系(如Intel体系、SPAC等)
+    三个层析进行交互的
+
+    Class files 、 ClassLoader 类装载器
+    运行时数据区
+    Execution Engine
+    -----
+    类加载器ClassLoader
+        负责加载class文件，class文件在文件开头
+        有特定的文件标示，并且ClassLoader只
+        负责class文件的加载，至于它是否可以
+        运行，则由Execution Engine决定，负责执行命令。
+    --反射有几种方式--有三种
+        Class.forName()
+        .class
+        .getClass()
+        -----
+    类装载器 ClassLoader2
+       Bootstrap Class Loader 使用C++实现
+        加载 $JAVAHOME/jre/lib/rt.jar
+        Object类处于rt.jar包内
+       Extension Class Loader
+        $JAVAHOME/jre
+        双层委派机制:加载类时，优先让父加载器加载。
+                    例如自己写一个String类，带有main方法，不能运行。
+                    任何一个父加载器没有加载到这个类，
+                    则才有System Class Loader加载。
+        沙箱机制
+
+        Native Interface 本地接口
+            本地接口的作用是融合不同的编程语言为Java所用。
+        Native Method Stack
+            native方法 本地方法
+            java在这个领域没有很好的能力去解决，必须
+            使用c和c++来操作。
+            具体做法是Native Method Stack中登记
+            native方法，在Execution Engine执行
+
+            程序=框架+业务逻辑
+            程序=算法+数据结构
+
+        PC寄存器，程序计数器
+        线程私有的，就是一个指针，
+        指向方法区中的方法字节码
+        用来存储指向下一条指令的地址
+
+        方法区；存储类信息、常量、静态变量+运行时常量池
+               是一种定义，不是实现。
+               JDK8中，方法区
+        栈区：
+            线程创建时创建、生命周期跟随线程
+                8中基本类型变量、对象的引用变量
+                +实例方法
+           保存 本地变量、栈操作、栈帧数据
+           栈帧包括：局部变量表、操作数栈...
+    -------
+           栈+堆+方法区的交互关系
+           栈指向堆，堆指向方法区。
+
+    2 堆体系结构
+    逻辑上堆分三块： 新生代、老年代、永久代
+
+        Young Generation Space
+        Tenure generation space
+        Perm
+    整个JVM只有一个堆内存。堆内存可以调节的。
+
+    Heap  新生代:eden survivor0 survivor1
+          老年代：
+    1.6 1.7 1.8 区别
+
+    永久代是方法区的实现。
+
+    Minor GC 只会发生在Eden区
+
+    Full GC or  Major GC 会在养老区域。
+
+    JVM Heap
+    -Xmx -Xms 打印GC的详细日志，在jvm启动参数中配置
+    ---GC日志---
+    Heap
+        PSYoungGen
+        PS是其中一种垃圾回收器
+        新生代
+        总大小、使用大小
+        地址偏移量
+        eden 使用情况
+        from 区使用
+        to   区使用
+        老年代 使用情况
+        元空间 使用情况
+
+        Runtime.getRuntime().maxMemory();
+        ------
+        在jvm启动参数中，配置出现OOM后，打印出Dump文件。
+        -----
+        什么是沙箱机制？
+        安全机制，保护JVM运行不被破坏，是一个目标；
+        双亲委派机制，是一种实现。
+        -----
+        JRocket  HotSpot
+        --MetaSpace的由来。
+        BA公司产品 WebLogic。
+        --逃逸分析--
+        new出来的对象，超出了方法管辖的范围。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
