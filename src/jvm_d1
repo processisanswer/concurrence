@@ -42,12 +42,12 @@ JVM入门与实战？
         Object类处于rt.jar包内
        Extension Class Loader
         $JAVAHOME/jre
-        双层委派机制:加载类时，优先让父加载器加载。
+        双层委派机制:加载类时，优先让父加载器加载。所有父类加载不到的时候，再由当前类加载器加载。
                     例如自己写一个String类，带有main方法，不能运行。
                     任何一个父加载器没有加载到这个类，
                     则才有System Class Loader加载。
         沙箱机制
-
+            为了保护Java程序运行秩序的机制，是一种规范
         Native Interface 本地接口
             本地接口的作用是融合不同的编程语言为Java所用。
         Native Method Stack
